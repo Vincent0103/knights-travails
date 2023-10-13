@@ -1,0 +1,12 @@
+body {
+  height: 100dvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.gameboard-container {
+  width: 80dvh;
+  height: 80dvh;
+  background-color: black;
+}
