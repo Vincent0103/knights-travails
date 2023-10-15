@@ -18,43 +18,12 @@
 
 eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\nconst addContent = () => {\n  window.addEventListener('DOMContentLoaded', () => {\n    const gameboardContainer = document.querySelector('.gameboard-container');\n    const blackChessCell = document.createElement('div');\n    blackChessCell.classList.add('chess-cell', 'black');\n    const whiteChessCell = document.createElement('chess-cell', 'white');\n    whiteChessCell.classList.add('chess-cell', 'white');\n    for (let i = 0; i < 4; i += 1) {\n      for (let j = 0; j < 4; j += 1) {\n        gameboardContainer.appendChild(whiteChessCell.cloneNode(true));\n        gameboardContainer.appendChild(blackChessCell.cloneNode(true));\n      }\n\n      for (let k = 0; k < 4; k += 1) {\n        gameboardContainer.appendChild(blackChessCell.cloneNode(true));\n        gameboardContainer.appendChild(whiteChessCell.cloneNode(true));\n      }\n    }\n  });\n};\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (addContent);\n\n\n//# sourceURL=webpack://my_package/./src/gameboard.js?");
 
-/***/ }),
-
-/***/ "./src/index.js":
-/*!**********************!*\
-  !*** ./src/index.js ***!
-  \**********************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _gameboard_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./gameboard.js */ \"./src/gameboard.js\");\n\n\nconst load = () => {\n  (0,_gameboard_js__WEBPACK_IMPORTED_MODULE_0__[\"default\"])();\n};\n\nload();\n\n\n//# sourceURL=webpack://my_package/./src/index.js?");
-
 /***/ })
 
 /******/ 	});
 /************************************************************************/
-/******/ 	// The module cache
-/******/ 	var __webpack_module_cache__ = {};
-/******/ 	
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/ 		// Check if module is in cache
-/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
-/******/ 		if (cachedModule !== undefined) {
-/******/ 			return cachedModule.exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
-/******/ 			// no module.loaded needed
-/******/ 			exports: {}
-/******/ 		};
-/******/ 	
-/******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
-/******/ 	
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
+/******/ 	// The require scope
+/******/ 	var __webpack_require__ = {};
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
@@ -90,7 +59,8 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _gam
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module can't be inlined because the eval devtool is used.
-/******/ 	var __webpack_exports__ = __webpack_require__("./src/index.js");
+/******/ 	var __webpack_exports__ = {};
+/******/ 	__webpack_modules__["./src/gameboard.js"](0, __webpack_exports__, __webpack_require__);
 /******/ 	
 /******/ })()
 ;
