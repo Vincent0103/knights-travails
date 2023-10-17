@@ -1,10 +1,10 @@
 const addChessboard = () => {
-  function addColumnNumber(gameboardContainer, firstCellColor, lastCellColor, numberCell, number) {
+  function addColumnNumber(cell, numberCell, number) {
+    numberCell.classList.remove('line');
+    numberCell.classList.add('column');
     const currentNumberCell = numberCell;
-    gameboardContainer.appendChild(firstCellColor.cloneNode(true));
-    currentNumberCell.textContent = number * 2 + 1;
-    lastCellColor.appendChild(numberCell);
-    gameboardContainer.appendChild(lastCellColor.cloneNode(true));
+    currentNumberCell.textContent = number;
+    cell.appendChild(currentNumberCell);
   }
 
   function addLineCells(
@@ -12,44 +12,21 @@ const addChessboard = () => {
     firstCellColor,
     lastCellColor,
     lineNumberCell,
-    isLastLineOfBoard = false,
+    isLastLine = false,
   ) {
-    if (!isLastLineOfBoard) {
-      // put the line numbers of the chessboard from the y-axis to the left
-      const startingCellColor = firstCellColor.cloneNode(true);
-      startingCellColor.appendChild(lineNumberCell);
-      gameboardContainer.appendChild(startingCellColor.cloneNode(true));
+    // put the line numbers of the chessboard from the y-axis to the left
+    const startingCellColor = firstCellColor.cloneNode(true);
+    startingCellColor.appendChild(lineNumberCell);
+    if (isLastLine) addColumnNumber(startingCellColor, lineNumberCell.cloneNode(true), 0);
+    gameboardContainer.appendChild(startingCellColor.cloneNode(true));
+    if (isLastLine) addColumnNumber(lastCellColor, lineNumberCell, 1);
+    gameboardContainer.appendChild(lastCellColor.cloneNode(true));
+
+    for (let i = 0; i < 3; i += 1) {
+      if (isLastLine) addColumnNumber(firstCellColor, lineNumberCell, i * 2 + 2);
+      gameboardContainer.appendChild(firstCellColor.cloneNode(true));
+      if (isLastLine) addColumnNumber(lastCellColor, lineNumberCell, i * 2 + 3);
       gameboardContainer.appendChild(lastCellColor.cloneNode(true));
-
-      for (let i = 0; i < 3; i += 1) {
-        gameboardContainer.appendChild(firstCellColor.cloneNode(true));
-        gameboardContainer.appendChild(lastCellColor.cloneNode(true));
-      }
-    } else {
-      for (let i = 0; i < 4; i += 1) {
-        const columnNumberCell = lineNumberCell;
-        columnNumberCell.textContent = i * 2;
-        if (i === 0) {
-          const startingFirstCellColor = firstCellColor.cloneNode(true);
-          startingFirstCellColor.appendChild(lineNumberCell);
-
-          columnNumberCell.classList.remove('line');
-          columnNumberCell.classList.add('column');
-
-          const firstColumnNumberCell = columnNumberCell.cloneNode(true);
-          startingFirstCellColor.appendChild(firstColumnNumberCell);
-          addColumnNumber(
-            gameboardContainer,
-            startingFirstCellColor,
-            lastCellColor,
-            columnNumberCell,
-            i,
-          );
-        } else {
-          firstCellColor.appendChild(columnNumberCell);
-          addColumnNumber(gameboardContainer, firstCellColor, lastCellColor, columnNumberCell, i);
-        }
-      }
     }
   }
 
