@@ -1,4 +1,12 @@
+import chessKnightIcon from './assets/horse_chess_piece_knight.svg';
+
 const addChessboard = () => {
+  function placeKnightAt(fromCoordinates, toCoordinates) {
+    const startingCell = document.querySelector(`.chess-cell[data-x="${fromCoordinates[0]}"][data-y="${fromCoordinates[1]}"]`);
+    const endingCell = document.querySelector(`.chess-cell[data-x="${toCoordinates[0]}"][data-y="${toCoordinates[1]}"]`);
+    console.log(startingCell, endingCell);
+  }
+
   function addColumnNumber(cell, numberCell, number) {
     numberCell.classList.remove('line');
     numberCell.classList.add('column');
@@ -71,6 +79,7 @@ const addChessboard = () => {
   function content() {
     window.addEventListener('DOMContentLoaded', () => {
       addChessCells();
+      placeKnightAt([4, 7], [2, 5]);
     });
   }
 
