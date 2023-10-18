@@ -4,7 +4,7 @@ const addChessboard = () => {
   function placeKnightAt(fromCoordinates, toCoordinates) {
     const startingCell = document.querySelector(`.chess-cell[data-x="${fromCoordinates[0]}"][data-y="${fromCoordinates[1]}"]`);
     const endingCell = document.querySelector(`.chess-cell[data-x="${toCoordinates[0]}"][data-y="${toCoordinates[1]}"]`);
-    console.log(startingCell, endingCell);
+    startingCell.innerHTML = chessKnightIcon;
   }
 
   function addColumnNumber(cell, numberCell, number) {

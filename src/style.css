@@ -47,3 +47,15 @@ body {
   left: 40%;
   bottom: -80%;
 }
+
+.knight-icon {
+  position: absolute;
+  fill: none;
+  stroke: white;
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  top: 10%;
+  left: 10%;
+  width: 80%;
+  height: 80%;
+}
