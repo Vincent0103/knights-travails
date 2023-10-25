@@ -18,31 +18,34 @@ const GetShortestPath = (fromCoordinates, toCoordinates) => {
   const node = (data, explored = false) => ({ data, explored });
 
   function getNeighborsCoordinates(root) {
-    const neighborCells = [];
+    const neighborsCoordinates = [];
     Object.keys(possibleKnightMoves).forEach((key) => {
-      const cellNeighborX = root[0] + possibleKnightMoves[key][0];
-      const cellNeighborY = root[1] + possibleKnightMoves[key][1];
-      const areCoordinatesInBoard = (cellNeighborX >= 0 && cellNeighborX <= 7)
-      && (cellNeighborY >= 0 && cellNeighborY <= 7);
+      const neighborX = root[0] + possibleKnightMoves[key][0];
+      const neighborY = root[1] + possibleKnightMoves[key][1];
+      const areCoordinatesInBoard = (neighborX >= 0 && neighborX <= 7)
+      && (neighborY >= 0 && neighborY <= 7);
 
-      if (areCoordinatesInBoard) neighborCells.push([cellNeighborX, cellNeighborY]);
+      if (areCoordinatesInBoard) neighborsCoordinates.push([neighborX, neighborY]);
     });
-    return neighborCells;
+    return neighborsCoordinates;
   }
 
-  function bfs(value, root = node(startingCoordinates), q = []) {
+  function bfs(value, root = node(startingCoordinates), q = [root]) {
     const rootNode = root;
     rootNode.explored = true;
-    q.push(rootNode);
     if (q.length > 0) {
       const currentNode = q.shift();
       if (currentNode.data === value) return value;
-      const neighborCells = getNeighborsCoordinates(currentNode.data);
-      neighborCells.forEach((cell) => {
-        if (cell) return bfs(value, node(cell), q);
-      });
+      const neighborCoordinates = getNeighborsCoordinates(currentNode.data);
+
+      // eslint-disable-next-line no-restricted-syntax
+      for (const coordinates of neighborCoordinates) {
+        if (coordinates.every((coordinate, index) => coordinate === value[index])) {
+          return [rootNode.data, value];
+        }
+        q.push(node(coordinates));
+      }
     }
-    return null;
   }
 
   return bfs(endingCoordinates);
@@ -58,6 +61,7 @@ const CreateGame = (chessboardContainer) => {
     endingCell.style.backgroundColor = 'rgb(106, 90, 205)';
 
     const shortestPath = GetShortestPath(fromCoordinates, toCoordinates);
+    console.log(shortestPath);
   }
 
   return { knightMoves };
