@@ -1,11 +1,5 @@
-import chessKnightIcon from './assets/horse_chess_piece_knight.svg';
-
-const addChessboard = () => {
-  function placeKnightAt(fromCoordinates, toCoordinates) {
-    const startingCell = document.querySelector(`.chess-cell[data-x="${fromCoordinates[0]}"][data-y="${fromCoordinates[1]}"]`);
-    const endingCell = document.querySelector(`.chess-cell[data-x="${toCoordinates[0]}"][data-y="${toCoordinates[1]}"]`);
-    startingCell.innerHTML = chessKnightIcon;
-  }
+const AddChessboard = () => {
+  let gameboardContainer;
 
   function addColumnNumber(cell, numberCell, number) {
     numberCell.classList.remove('line');
@@ -16,7 +10,6 @@ const addChessboard = () => {
   }
 
   function addLineCells(
-    gameboardContainer,
     firstCellColor,
     lastCellColor,
     lineNumberCell,
@@ -54,7 +47,7 @@ const addChessboard = () => {
   }
 
   function addChessCells() {
-    const gameboardContainer = document.querySelector('.gameboard-container');
+    gameboardContainer = document.querySelector('.gameboard-container');
 
     const blackChessCell = document.createElement('div');
     blackChessCell.classList.add('chess-cell', 'black');
@@ -66,28 +59,21 @@ const addChessboard = () => {
       const lineNumberCell = document.createElement('div');
       lineNumberCell.classList.add('board-number', 'line');
       lineNumberCell.textContent = i * 2 - 1;
-      addLineCells(gameboardContainer, whiteChessCell, blackChessCell, lineNumberCell);
+      addLineCells(whiteChessCell, blackChessCell, lineNumberCell);
       lineNumberCell.textContent = i * 2 - 2;
       if (i === 1) {
-        addLineCells(gameboardContainer, blackChessCell, whiteChessCell, lineNumberCell, true);
+        addLineCells(blackChessCell, whiteChessCell, lineNumberCell, true);
       } else {
-        addLineCells(gameboardContainer, blackChessCell, whiteChessCell, lineNumberCell);
+        addLineCells(blackChessCell, whiteChessCell, lineNumberCell);
       }
     }
+
+    return gameboardContainer;
   }
 
-  function content() {
-    window.addEventListener('DOMContentLoaded', () => {
-      addChessCells();
-      placeKnightAt([4, 7], [2, 5]);
-    });
-  }
-
-  return content();
+  return addChessCells();
 };
 
-const addContent = () => {
-  addChessboard();
-};
+const AddContent = () => AddChessboard();
 
-export default addContent;
+export default AddContent;

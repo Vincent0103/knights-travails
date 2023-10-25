@@ -5,6 +5,7 @@ module.exports = {
   entry: {
     index: './src/index.js',
     gameboard: './src/gameboard.js',
+    gameLogic: './src/gameLogic.js',
   },
   output: {
     filename: '[name].bundle.js',
