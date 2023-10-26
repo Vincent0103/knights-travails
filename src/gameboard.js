@@ -101,36 +101,36 @@ const Chessboard = () => {
 
 const knight = () => {
   function addKnight(startingCell) {
-    startingCell.innerHTML += chessKnightIcon;
+    const cell = startingCell;
+    cell.innerHTML += chessKnightIcon;
+    const newKnightIcon = cell.querySelector('.knight-icon');
+    newKnightIcon.style.animation = '.2s fadeIn';
+  }
+
+  function removeKnight(startingCell) {
+    const knightIcon = startingCell.querySelector('.knight-icon');
+    knightIcon.style.animation = '.2s fadeOut';
+    setTimeout(() => {
+      startingCell.removeChild(knightIcon);
+    }, 190);
   }
 
   function addTargetKnightArrival(endingCell) {
     endingCell.style.background = 'radial-gradient(circle, rgba(106, 90, 205, 1) 0%, rgba(106, 90, 205, .8) 100%)';
   }
 
+  function removeTargetKnightArrival(endingCell) {
+    endingCell.style.background = '';
+  }
+
   function animateKnight(path) {
-    function removeKnightAt(cell) {
-      const knightIcon = cell.querySelector('.knight-icon');
-      knightIcon.style.animation = '.2s fadeOut';
-      setTimeout(() => {
-        cell.removeChild(knightIcon);
-      }, 190);
-    }
-
-    function addKnightAt(cell) {
-      const nextCell = cell;
-      nextCell.innerHTML += chessKnightIcon;
-      const newKnightIcon = nextCell.querySelector('.knight-icon');
-      newKnightIcon.style.animation = '.2s fadeIn';
-    }
-
     // makes it so the function executes each seconds
     function delayExecution(i) {
       if (path[i + 1] !== undefined) {
         const currentCell = document.querySelector(`.chess-cell[data-x="${path[i][0]}"][data-y="${path[i][1]}"]`);
-        removeKnightAt(currentCell);
+        removeKnight(currentCell);
         const nextCell = document.querySelector(`.chess-cell[data-x="${path[i + 1][0]}"][data-y="${path[i + 1][1]}"]`);
-        addKnightAt(nextCell);
+        addKnight(nextCell);
       }
 
       if (i < path.length - 1) {
@@ -141,7 +141,9 @@ const knight = () => {
     setTimeout(() => delayExecution(0), 800);
   }
 
-  return { addKnight, addTargetKnightArrival, animateKnight };
+  return {
+    addKnight, removeKnight, addTargetKnightArrival, removeTargetKnightArrival, animateKnight,
+  };
 };
 
 export default Chessboard;

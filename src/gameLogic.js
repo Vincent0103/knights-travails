@@ -92,6 +92,29 @@ const CreateGame = (chessboardContainer) => {
     return instructionMessage;
   }
 
+  function getWaitTime(shortestPathArray) {
+    let waitTime = 0;
+    shortestPathArray.forEach(() => {
+      waitTime += 900;
+    });
+    return waitTime;
+  }
+
+  function listenSpacebar(treatCell, waitTime) {
+    setTimeout(() => {
+      let spaceable = true;
+      document.addEventListener('keyup', (e) => {
+        if (e.key === ' ' && spaceable) {
+          chessboard.changeInstructionMessage('Place your knight');
+          knight.removeKnight(treatCell);
+          knight.removeTargetKnightArrival(treatCell);
+          spaceable = false;
+          listenPlaceKnight();
+        }
+      }, { once: true });
+    }, waitTime);
+  }
+
   function listenPlaceFinishingSquare(startingCell) {
     let clickable = true;
     chessCells.forEach((cell) => {
@@ -99,11 +122,13 @@ const CreateGame = (chessboardContainer) => {
         if (clickable) {
           knight.addTargetKnightArrival(cell);
           const shortestPath = knightMoves(startingCell, cell);
+          const waitTime = getWaitTime(shortestPath);
           const instructionMessage = treatPathText(shortestPath);
           chessboard.changeInstructionMessage(instructionMessage);
+          listenSpacebar(cell, waitTime);
           clickable = false;
         }
-      });
+      }, { once: true });
     });
   }
 
