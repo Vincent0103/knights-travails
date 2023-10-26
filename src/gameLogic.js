@@ -1,4 +1,4 @@
-import chessKnightIcon from './assets/horse_chess_piece_knight.svg';
+import { knightModule } from './gameboard';
 
 const GetShortestPath = (fromCoordinates, toCoordinates) => {
   const startingCoordinates = fromCoordinates;
@@ -70,10 +70,11 @@ const CreateGame = (chessboardContainer) => {
   function knightMoves(fromCoordinates, toCoordinates) {
     const startingCell = document.querySelector(`.chess-cell[data-x="${fromCoordinates[0]}"][data-y="${fromCoordinates[1]}"]`);
     const endingCell = document.querySelector(`.chess-cell[data-x="${toCoordinates[0]}"][data-y="${toCoordinates[1]}"]`);
-    startingCell.innerHTML += chessKnightIcon;
-    endingCell.style.background = 'radial-gradient(circle, rgba(106, 90, 205, 1) 0%, rgba(106, 90, 205, .8) 100%)';
+    const knightObj = knightModule();
+    knightObj.addKnight(startingCell, endingCell);
 
     const shortestPath = GetShortestPath(fromCoordinates, toCoordinates);
+    knightObj.animateKnight(shortestPath);
     console.log(shortestPath);
   }
 

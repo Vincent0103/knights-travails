@@ -25,10 +25,15 @@ body {
 
 .chess-cell {
   position: relative;
+  transition: transform .1s;
 }
 
 .chess-cell.black {
   background-color: black;
+}
+
+.chess-cell.white {
+  background-color: white;
 }
 
 .board-number {
@@ -58,4 +63,22 @@ body {
   left: 10%;
   width: 80%;
   height: 80%;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0%;
+  }
+  to {
+    opacity: 100%;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 100%;
+  }
+  to {
+    opacity: 0%;
+  }
 }

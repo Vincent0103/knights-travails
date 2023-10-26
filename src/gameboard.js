@@ -1,3 +1,18 @@
+import chessKnightIcon from './assets/horse_chess_piece_knight.svg';
+
+const animateChessboard = (chessboard) => {
+  const chessCells = chessboard.querySelectorAll('.chess-cell');
+  chessCells.forEach((cell) => {
+    cell.addEventListener('mouseenter', () => {
+      cell.style.transform = 'scale(1.05)';
+    });
+
+    cell.addEventListener('mouseleave', () => {
+      cell.style.transform = 'scale(1)';
+    });
+  });
+};
+
 const AddChessboard = () => {
   let gameboardContainer;
 
@@ -68,12 +83,45 @@ const AddChessboard = () => {
       }
     }
 
+    animateChessboard(gameboardContainer);
     return gameboardContainer;
   }
 
   return addChessCells();
 };
 
-const AddContent = () => AddChessboard();
+const knight = () => {
+  function addKnight(startingCell, endingCell) {
+    startingCell.innerHTML += chessKnightIcon;
+    endingCell.style.background = 'radial-gradient(circle, rgba(106, 90, 205, 1) 0%, rgba(106, 90, 205, .8) 100%)';
+  }
 
-export default AddContent;
+  function animateKnight(path) {
+    // makes it so the function executes each seconds
+    function delayExecution(i) {
+      if (path[i + 1] !== undefined) {
+        const currentCell = document.querySelector(`.chess-cell[data-x="${path[i][0]}"][data-y="${path[i][1]}"]`);
+        const knightIcon = currentCell.querySelector('.knight-icon');
+        knightIcon.style.animation = '.1s fadeOut';
+        setTimeout(() => {
+          currentCell.removeChild(knightIcon);
+        }, 90);
+        const nextCell = document.querySelector(`.chess-cell[data-x="${path[i + 1][0]}"][data-y="${path[i + 1][1]}"]`);
+        nextCell.innerHTML += chessKnightIcon;
+        const newKnightIcon = nextCell.querySelector('.knight-icon');
+        newKnightIcon.style.animation = '.1s fadeIn';
+      }
+
+      if (i < path.length - 1) {
+        setTimeout(() => delayExecution(i + 1), 800);
+      }
+    }
+
+    setTimeout(() => delayExecution(0), 800);
+  }
+
+  return { addKnight, animateKnight };
+};
+
+export default AddChessboard;
+export const knightModule = knight;
