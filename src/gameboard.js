@@ -1,20 +1,29 @@
 import chessKnightIcon from './assets/horse_chess_piece_knight.svg';
 
 const animateChessboard = (chessboard) => {
-  const chessCells = chessboard.querySelectorAll('.chess-cell');
-  chessCells.forEach((cell) => {
-    cell.addEventListener('mouseenter', () => {
-      cell.style.transform = 'scale(1.05)';
-    });
+  function addChessCellsHoverAnimation() {
+    const chessCells = chessboard.querySelectorAll('.chess-cell');
+    chessCells.forEach((cell) => {
+      cell.addEventListener('mouseenter', () => {
+        cell.style.transform = 'scale(1.05)';
+      });
 
-    cell.addEventListener('mouseleave', () => {
-      cell.style.transform = 'scale(1)';
+      cell.addEventListener('mouseleave', () => {
+        cell.style.transform = 'scale(1)';
+      });
     });
-  });
+  }
+
+  addChessCellsHoverAnimation();
 };
 
-const AddChessboard = () => {
+const Chessboard = () => {
   let gameboardContainer;
+
+  function changeInstructionMessage() {
+    const instructionP = document.body.querySelector('p:first-child');
+    instructionP.textContent = 'Choose the finishing square';
+  }
 
   function addColumnNumber(cell, numberCell, number) {
     numberCell.classList.remove('line');
@@ -87,29 +96,41 @@ const AddChessboard = () => {
     return gameboardContainer;
   }
 
-  return addChessCells();
+  return { addChessCells, changeInstructionMessage };
 };
 
 const knight = () => {
   function addKnight(startingCell, endingCell) {
     startingCell.innerHTML += chessKnightIcon;
+  }
+
+  function addTargetKnightArrival(endingCell) {
     endingCell.style.background = 'radial-gradient(circle, rgba(106, 90, 205, 1) 0%, rgba(106, 90, 205, .8) 100%)';
   }
 
   function animateKnight(path) {
+    function removeKnightAt(cell) {
+      const knightIcon = cell.querySelector('.knight-icon');
+      knightIcon.style.animation = '.1s fadeOut';
+      setTimeout(() => {
+        cell.removeChild(knightIcon);
+      }, 90);
+    }
+
+    function addKnightAt(cell) {
+      const nextCell = cell;
+      nextCell.innerHTML += chessKnightIcon;
+      const newKnightIcon = nextCell.querySelector('.knight-icon');
+      newKnightIcon.style.animation = '.1s fadeIn';
+    }
+
     // makes it so the function executes each seconds
     function delayExecution(i) {
       if (path[i + 1] !== undefined) {
         const currentCell = document.querySelector(`.chess-cell[data-x="${path[i][0]}"][data-y="${path[i][1]}"]`);
-        const knightIcon = currentCell.querySelector('.knight-icon');
-        knightIcon.style.animation = '.1s fadeOut';
-        setTimeout(() => {
-          currentCell.removeChild(knightIcon);
-        }, 90);
+        removeKnightAt(currentCell);
         const nextCell = document.querySelector(`.chess-cell[data-x="${path[i + 1][0]}"][data-y="${path[i + 1][1]}"]`);
-        nextCell.innerHTML += chessKnightIcon;
-        const newKnightIcon = nextCell.querySelector('.knight-icon');
-        newKnightIcon.style.animation = '.1s fadeIn';
+        addKnightAt(nextCell);
       }
 
       if (i < path.length - 1) {
@@ -120,8 +141,8 @@ const knight = () => {
     setTimeout(() => delayExecution(0), 800);
   }
 
-  return { addKnight, animateKnight };
+  return { addKnight, addTargetKnightArrival, animateKnight };
 };
 
-export default AddChessboard;
+export default Chessboard;
 export const knightModule = knight;

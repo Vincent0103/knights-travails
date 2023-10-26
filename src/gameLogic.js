@@ -1,4 +1,4 @@
-import { knightModule } from './gameboard';
+import Chessboard, { knightModule } from './gameboard';
 
 const GetShortestPath = (fromCoordinates, toCoordinates) => {
   const startingCoordinates = fromCoordinates;
@@ -67,6 +67,35 @@ const GetShortestPath = (fromCoordinates, toCoordinates) => {
 };
 
 const CreateGame = (chessboardContainer) => {
+  const chessCells = chessboardContainer.querySelectorAll('.chess-cell');
+  const chessboard = Chessboard();
+  const knight = knightModule();
+
+  function listenPlaceFinishingSquare() {
+    const clickable = true;
+    chessCells.forEach((cell) => {
+      cell.addEventListener('click', () => {
+        if (clickable) {
+          knight.addTargetKnightArrival(cell);
+        }
+      });
+    });
+  }
+
+  function listenPlaceKnight() {
+    let clickable = true;
+    chessCells.forEach((cell) => {
+      cell.addEventListener('click', () => {
+        if (clickable) {
+          knight.addKnight(cell);
+          chessboard.changeInstructionMessage();
+          clickable = false;
+          listenPlaceFinishingSquare();
+        }
+      }, { once: true });
+    });
+  }
+
   function knightMoves(fromCoordinates, toCoordinates) {
     const startingCell = document.querySelector(`.chess-cell[data-x="${fromCoordinates[0]}"][data-y="${fromCoordinates[1]}"]`);
     const endingCell = document.querySelector(`.chess-cell[data-x="${toCoordinates[0]}"][data-y="${toCoordinates[1]}"]`);
@@ -78,7 +107,7 @@ const CreateGame = (chessboardContainer) => {
     console.log(shortestPath);
   }
 
-  return { knightMoves };
+  return { knightMoves, listenPlaceKnight };
 };
 
 export default CreateGame;
