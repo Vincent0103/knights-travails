@@ -15,9 +15,9 @@ const GetShortestPath = (fromCoordinates, toCoordinates) => {
   const startingCoordinates = fromCoordinates;
   const endingCoordinates = toCoordinates;
 
-  const node = (data, explored = false) => ({ data, explored });
+  const node = (data, next = null) => ({ data, next });
 
-  function getNeighborsCoordinates(root) {
+  function getNeighborsCoordinates(root, array) {
     const neighborsCoordinates = [];
     Object.keys(possibleKnightMoves).forEach((key) => {
       const neighborX = root[0] + possibleKnightMoves[key][0];
@@ -25,27 +25,34 @@ const GetShortestPath = (fromCoordinates, toCoordinates) => {
       const areCoordinatesInBoard = (neighborX >= 0 && neighborX <= 7)
       && (neighborY >= 0 && neighborY <= 7);
 
-      if (areCoordinatesInBoard) neighborsCoordinates.push([neighborX, neighborY]);
+      if (array.every((item) => !item.includes(neighborX) || !item.includes(neighborY))
+      && areCoordinatesInBoard) {
+        neighborsCoordinates.push([neighborX, neighborY]);
+      }
     });
     return neighborsCoordinates;
   }
 
-  function bfs(value, root = node(startingCoordinates), q = [root]) {
+  function bfs(value, root = node(startingCoordinates), q = [root], visited = []) {
     const rootNode = root;
-    rootNode.explored = true;
     if (q.length > 0) {
       const currentNode = q.shift();
+      visited.push(currentNode.data);
+      console.log(visited);
       if (currentNode.data === value) return value;
-      const neighborCoordinates = getNeighborsCoordinates(currentNode.data);
+      const neighborCoordinates = getNeighborsCoordinates(currentNode.data, visited);
 
       // eslint-disable-next-line no-restricted-syntax
       for (const coordinates of neighborCoordinates) {
         if (coordinates.every((coordinate, index) => coordinate === value[index])) {
           return [rootNode.data, value];
         }
-        q.push(node(coordinates));
+        const coordinatesNode = node(coordinates);
+        q.push(coordinatesNode);
       }
+      return bfs(value, q[0], q, visited);
     }
+    return null;
   }
 
   return bfs(endingCoordinates);
@@ -57,7 +64,7 @@ const CreateGame = (chessboardContainer) => {
   function knightMoves(fromCoordinates, toCoordinates) {
     const startingCell = document.querySelector(`.chess-cell[data-x="${fromCoordinates[0]}"][data-y="${fromCoordinates[1]}"]`);
     const endingCell = document.querySelector(`.chess-cell[data-x="${toCoordinates[0]}"][data-y="${toCoordinates[1]}"]`);
-    startingCell.innerHTML = chessKnightIcon;
+    startingCell.innerHTML += chessKnightIcon;
     endingCell.style.backgroundColor = 'rgb(106, 90, 205)';
 
     const shortestPath = GetShortestPath(fromCoordinates, toCoordinates);
