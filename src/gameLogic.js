@@ -71,12 +71,37 @@ const CreateGame = (chessboardContainer) => {
   const chessboard = Chessboard();
   const knight = knightModule();
 
-  function listenPlaceFinishingSquare() {
-    const clickable = true;
+  function knightMoves(startingCell, endingCell) {
+    const fromCoordinates = [Number.parseInt(startingCell.getAttribute('data-x'), 10),
+      Number.parseInt(startingCell.getAttribute('data-y'), 10)];
+    const toCoordinates = [Number.parseInt(endingCell.getAttribute('data-x'), 10),
+      Number.parseInt(endingCell.getAttribute('data-y'), 10)];
+    const knightObj = knightModule();
+
+    const shortestPath = GetShortestPath(fromCoordinates, toCoordinates);
+    knightObj.animateKnight(shortestPath);
+    return shortestPath;
+  }
+
+  function treatPathText(shortestPath) {
+    let instructionMessage = 'Path: ';
+    shortestPath.forEach((coordinates) => {
+      instructionMessage += `[${coordinates}], `;
+    });
+    instructionMessage = instructionMessage.slice(0, -2);
+    return instructionMessage;
+  }
+
+  function listenPlaceFinishingSquare(startingCell) {
+    let clickable = true;
     chessCells.forEach((cell) => {
       cell.addEventListener('click', () => {
         if (clickable) {
           knight.addTargetKnightArrival(cell);
+          const shortestPath = knightMoves(startingCell, cell);
+          const instructionMessage = treatPathText(shortestPath);
+          chessboard.changeInstructionMessage(instructionMessage);
+          clickable = false;
         }
       });
     });
@@ -88,23 +113,12 @@ const CreateGame = (chessboardContainer) => {
       cell.addEventListener('click', () => {
         if (clickable) {
           knight.addKnight(cell);
-          chessboard.changeInstructionMessage();
+          chessboard.changeInstructionMessage('choose the finishing square');
           clickable = false;
-          listenPlaceFinishingSquare();
+          listenPlaceFinishingSquare(cell);
         }
       }, { once: true });
     });
-  }
-
-  function knightMoves(fromCoordinates, toCoordinates) {
-    const startingCell = document.querySelector(`.chess-cell[data-x="${fromCoordinates[0]}"][data-y="${fromCoordinates[1]}"]`);
-    const endingCell = document.querySelector(`.chess-cell[data-x="${toCoordinates[0]}"][data-y="${toCoordinates[1]}"]`);
-    const knightObj = knightModule();
-    knightObj.addKnight(startingCell, endingCell);
-
-    const shortestPath = GetShortestPath(fromCoordinates, toCoordinates);
-    knightObj.animateKnight(shortestPath);
-    console.log(shortestPath);
   }
 
   return { knightMoves, listenPlaceKnight };

@@ -13,10 +13,6 @@ body {
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
-body > p:first-child {
-  font-weight: 500;
-}
-
 .gameboard-container {
   position: relative;
   display: grid;
@@ -30,7 +26,7 @@ body > p:first-child {
 
 .chess-cell {
   position: relative;
-  transition: transform .1s;
+  transition: all .1s;
 }
 
 .chess-cell.black {

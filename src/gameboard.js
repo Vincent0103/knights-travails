@@ -20,9 +20,9 @@ const animateChessboard = (chessboard) => {
 const Chessboard = () => {
   let gameboardContainer;
 
-  function changeInstructionMessage() {
-    const instructionP = document.body.querySelector('p:first-child');
-    instructionP.textContent = 'Choose the finishing square';
+  function changeInstructionMessage(text) {
+    const instructionP = document.body.querySelector('h2:first-child');
+    instructionP.textContent = text;
   }
 
   function addColumnNumber(cell, numberCell, number) {
@@ -100,7 +100,7 @@ const Chessboard = () => {
 };
 
 const knight = () => {
-  function addKnight(startingCell, endingCell) {
+  function addKnight(startingCell) {
     startingCell.innerHTML += chessKnightIcon;
   }
 
@@ -111,17 +111,17 @@ const knight = () => {
   function animateKnight(path) {
     function removeKnightAt(cell) {
       const knightIcon = cell.querySelector('.knight-icon');
-      knightIcon.style.animation = '.1s fadeOut';
+      knightIcon.style.animation = '.2s fadeOut';
       setTimeout(() => {
         cell.removeChild(knightIcon);
-      }, 90);
+      }, 190);
     }
 
     function addKnightAt(cell) {
       const nextCell = cell;
       nextCell.innerHTML += chessKnightIcon;
       const newKnightIcon = nextCell.querySelector('.knight-icon');
-      newKnightIcon.style.animation = '.1s fadeIn';
+      newKnightIcon.style.animation = '.2s fadeIn';
     }
 
     // makes it so the function executes each seconds
