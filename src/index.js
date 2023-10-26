@@ -5,8 +5,7 @@ async function load() {
   window.addEventListener('DOMContentLoaded', () => {
     const gameboardContainer = AddContent();
     const game = CreateGame(gameboardContainer);
-    // game.knightMoves([2, 4], [3, 2]);
-    game.knightMoves([0, 7], [4, 2]);
+    game.knightMoves([0, 7], [5, 1]);
   });
 }
 

@@ -1,31 +1,24 @@
 import chessKnightIcon from './assets/horse_chess_piece_knight.svg';
 
-const possibleKnightMoves = {
-  upperUpperRight: [1, 2],
-  upperRight: [2, 1],
-  lowerRight: [2, -1],
-  lowerLowerRight: [1, -2],
-  lowerLowerLeft: [-1, -2],
-  lowerLeft: [-2, -1],
-  upperLeft: [-2, 1],
-  upperUpperLeft: [-1, 2],
-};
-
 const GetShortestPath = (fromCoordinates, toCoordinates) => {
   const startingCoordinates = fromCoordinates;
   const endingCoordinates = toCoordinates;
+  const possibleKnightMoves = [
+    [1, 2], [2, 1], [2, -1], [1, -2],
+    [-1, -2], [-2, -1], [-2, 1], [-1, 2],
+  ];
 
-  const node = (data, next = null) => ({ data, next });
+  const node = (data, parent = null, next = []) => ({ data, next, parent });
 
   function getNeighborsCoordinates(root, array) {
     const neighborsCoordinates = [];
-    Object.keys(possibleKnightMoves).forEach((key) => {
-      const neighborX = root[0] + possibleKnightMoves[key][0];
-      const neighborY = root[1] + possibleKnightMoves[key][1];
+    possibleKnightMoves.forEach((move) => {
+      const neighborX = root[0] + move[0];
+      const neighborY = root[1] + move[1];
       const areCoordinatesInBoard = (neighborX >= 0 && neighborX <= 7)
       && (neighborY >= 0 && neighborY <= 7);
 
-      if (array.every((item) => !item.includes(neighborX) || !item.includes(neighborY))
+      if (array.every((item) => item[0] !== neighborX || item[1] !== neighborY)
       && areCoordinatesInBoard) {
         neighborsCoordinates.push([neighborX, neighborY]);
       }
@@ -33,24 +26,39 @@ const GetShortestPath = (fromCoordinates, toCoordinates) => {
     return neighborsCoordinates;
   }
 
-  function bfs(value, root = node(startingCoordinates), q = [root], visited = []) {
+  function getPath(targetNode) {
+    if (!targetNode.parent) return [targetNode.data];
+    return [targetNode.data].concat(getPath(targetNode.parent));
+  }
+
+  function bfs(
+    target,
+    root = node(startingCoordinates),
+    q = [root],
+    visited = [],
+  ) {
     const rootNode = root;
+    // edge case if starting and ending coordinates are the same
+    if (rootNode.data[0] === target[0] && rootNode.data[1] === target[1]) return target;
+
     if (q.length > 0) {
       const currentNode = q.shift();
       visited.push(currentNode.data);
-      console.log(visited);
-      if (currentNode.data === value) return value;
+
       const neighborCoordinates = getNeighborsCoordinates(currentNode.data, visited);
 
-      // eslint-disable-next-line no-restricted-syntax
-      for (const coordinates of neighborCoordinates) {
-        if (coordinates.every((coordinate, index) => coordinate === value[index])) {
-          return [rootNode.data, value];
+      for (let i = 0; i < neighborCoordinates.length; i += 1) {
+        // check if one of the neighborCoordinates match with the endingCoordinates (target)
+        if (neighborCoordinates[i].every((coordinate, index) => coordinate === target[index])) {
+          const targetNode = node(target, rootNode);
+          rootNode.next.push(targetNode);
+          return getPath(targetNode).reverse();
         }
-        const coordinatesNode = node(coordinates);
+        const coordinatesNode = node(neighborCoordinates[i], rootNode);
+        rootNode.next.push(coordinatesNode);
         q.push(coordinatesNode);
       }
-      return bfs(value, q[0], q, visited);
+      return bfs(target, q[0], q, visited);
     }
     return null;
   }
@@ -59,13 +67,11 @@ const GetShortestPath = (fromCoordinates, toCoordinates) => {
 };
 
 const CreateGame = (chessboardContainer) => {
-  const gameboardContainer = chessboardContainer;
-
   function knightMoves(fromCoordinates, toCoordinates) {
     const startingCell = document.querySelector(`.chess-cell[data-x="${fromCoordinates[0]}"][data-y="${fromCoordinates[1]}"]`);
     const endingCell = document.querySelector(`.chess-cell[data-x="${toCoordinates[0]}"][data-y="${toCoordinates[1]}"]`);
     startingCell.innerHTML += chessKnightIcon;
-    endingCell.style.backgroundColor = 'rgb(106, 90, 205)';
+    endingCell.style.background = 'radial-gradient(circle, rgba(106, 90, 205, 1) 0%, rgba(106, 90, 205, .8) 100%)';
 
     const shortestPath = GetShortestPath(fromCoordinates, toCoordinates);
     console.log(shortestPath);
