@@ -1,4 +1,6 @@
+// eslint-disable-next-line import/extensions
 import Chessboard from './gameboard.js';
+// eslint-disable-next-line import/extensions
 import CreateGame from './gameLogic.js';
 
 async function load() {
