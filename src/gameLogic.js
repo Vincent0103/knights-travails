@@ -83,11 +83,25 @@ const CreateGame = (chessboardContainer) => {
     return shortestPath;
   }
 
-  function treatPathText(shortestPath) {
+  function prettyConsolePrint(shortestPath, isPathLengthZero) {
+    const moves = shortestPath.length - 1;
+    if (isPathLengthZero) {
+      console.log("=> You made it without any move? Here's your path: ");
+      console.log(`[${shortestPath}]`);
+    } else {
+      console.log(`=> You made it in ${moves} moves! Here's your path: `);
+      shortestPath.forEach((coordinates) => {
+        console.log(`[${coordinates}]`);
+      });
+    }
+  }
+
+  function treatPathText(shortestPath, isPathLengthZero) {
     let instructionMessage = 'Path: ';
     shortestPath.forEach((coordinates) => {
-      instructionMessage += `[${coordinates}], `;
+      if (!isPathLengthZero) instructionMessage += `[${coordinates}], `;
     });
+    if (isPathLengthZero) instructionMessage += `[${shortestPath}], `;
     instructionMessage = instructionMessage.slice(0, -2);
     return instructionMessage;
   }
@@ -100,6 +114,14 @@ const CreateGame = (chessboardContainer) => {
     return waitTime;
   }
 
+  function getPathLength(shortestPath) {
+    let isPathLengthZero = false;
+    shortestPath.forEach((coordinates) => {
+      if (typeof coordinates === 'number') isPathLengthZero = true;
+    });
+    return isPathLengthZero;
+  }
+
   function listenSpacebar(treatCell, waitTime) {
     setTimeout(() => {
       let spaceable = true;
@@ -109,6 +131,9 @@ const CreateGame = (chessboardContainer) => {
           knight.removeKnight(treatCell);
           knight.removeTargetKnightArrival(treatCell);
           spaceable = false;
+
+          // disabled because three functions connected like a circle loop
+          // eslint-disable-next-line no-use-before-define
           listenPlaceKnight();
         }
       }, { once: true });
@@ -122,8 +147,11 @@ const CreateGame = (chessboardContainer) => {
         if (clickable) {
           knight.addTargetKnightArrival(cell);
           const shortestPath = knightMoves(startingCell, cell);
+          const isPathLengthZero = getPathLength(shortestPath);
+
+          prettyConsolePrint(shortestPath, isPathLengthZero);
           const waitTime = getWaitTime(shortestPath);
-          const instructionMessage = treatPathText(shortestPath);
+          const instructionMessage = treatPathText(shortestPath, isPathLengthZero);
           chessboard.changeInstructionMessage(instructionMessage);
           listenSpacebar(cell, waitTime);
           clickable = false;

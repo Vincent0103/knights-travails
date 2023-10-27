@@ -4,12 +4,13 @@ const animateChessboard = (chessboard) => {
   function addChessCellsHoverAnimation() {
     const chessCells = chessboard.querySelectorAll('.chess-cell');
     chessCells.forEach((cell) => {
-      cell.addEventListener('mouseenter', () => {
-        cell.style.transform = 'scale(1.05)';
+      const scalableCell = cell;
+      scalableCell.addEventListener('mouseenter', () => {
+        scalableCell.style.transform = 'scale(1.05)';
       });
 
-      cell.addEventListener('mouseleave', () => {
-        cell.style.transform = 'scale(1)';
+      scalableCell.addEventListener('mouseleave', () => {
+        scalableCell.style.transform = 'scale(1)';
       });
     });
   }
@@ -116,11 +117,13 @@ const knight = () => {
   }
 
   function addTargetKnightArrival(endingCell) {
-    endingCell.style.background = 'radial-gradient(circle, rgba(106, 90, 205, 1) 0%, rgba(106, 90, 205, .8) 100%)';
+    const cell = endingCell;
+    cell.style.background = 'radial-gradient(circle, rgba(106, 90, 205, 1) 0%, rgba(106, 90, 205, .8) 100%)';
   }
 
   function removeTargetKnightArrival(endingCell) {
-    endingCell.style.background = '';
+    const cell = endingCell;
+    cell.style.background = '';
   }
 
   function animateKnight(path) {
@@ -128,9 +131,9 @@ const knight = () => {
     function delayExecution(i) {
       if (path[i + 1] !== undefined) {
         const currentCell = document.querySelector(`.chess-cell[data-x="${path[i][0]}"][data-y="${path[i][1]}"]`);
-        removeKnight(currentCell);
+        if (currentCell) removeKnight(currentCell);
         const nextCell = document.querySelector(`.chess-cell[data-x="${path[i + 1][0]}"][data-y="${path[i + 1][1]}"]`);
-        addKnight(nextCell);
+        if (nextCell) addKnight(nextCell);
       }
 
       if (i < path.length - 1) {
