@@ -1,19 +1,19 @@
+
 # Knight Travails
 
 This web project finds the shortest path a knight can make on a chess board from a point A to a point B, the points are entirely choosable by the user via an UI. If you want even further explanation of the path taken, go to dev tools console.
 
-
 ## Algorithm used
 
 graph BFS
+
 ## Demo
 
 https://vincent0103.github.io/knight-travails
 
 ### Credits
 
-- Knight icon by Svg Vector Icons : http://www.onlinewebfonts.com/icon
-
+- Knight icon by Svg Vector Icons : [onlinewebfonts](http://www.onlinewebfonts.com/icon)
 
 ### Notes
 
