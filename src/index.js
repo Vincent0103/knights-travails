@@ -6,8 +6,7 @@ async function load() {
     const chessboard = Chessboard();
     const gameboardContainer = chessboard.addChessCells();
     const game = CreateGame(gameboardContainer);
-    game.listenPlaceKnight();
-    // game.knightMoves([1, 7], [7, 0]);
+    game.start();
   });
 }
 

@@ -174,7 +174,11 @@ const CreateGame = (chessboardContainer) => {
     });
   }
 
-  return { knightMoves, listenPlaceKnight };
+  function start() {
+    listenPlaceKnight();
+  }
+
+  return { knightMoves, start };
 };
 
 export default CreateGame;
