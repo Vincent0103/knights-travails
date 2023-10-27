@@ -9,7 +9,7 @@ graph BFS
 
 ## Demo
 
-https://vincent0103.github.io/knight-travails
+https://vincent0103.github.io/knights-travails
 
 ### Credits
 
